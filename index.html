@@ -1,212 +1,190 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>◆ MARKET TERMINAL</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0a0f; color: #c8d0e0; font-family: 'Courier New', monospace; font-size: 12px; height: 100vh; overflow: hidden; }
-        #app { display: flex; flex-direction: column; height: 100vh; }
-        .hdr { display: flex; align-items: center; background: #0d0d14; border-bottom: 1px solid #1a1a2e; padding: 0 12px; height: 36px; gap: 16px; flex-shrink: 0; }
-        .logo { color: #00d4ff; font-weight: bold; font-size: 13px; letter-spacing: 2px; white-space: nowrap; }
-        .ticker-bar { flex: 1; display: flex; gap: 20px; overflow: hidden; }
-        .ticker-item { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
-        .ticker-name { color: #6a7590; font-size: 11px; }
-        .ticker-val { color: #c8d0e0; font-size: 11px; }
-        .ticker-chg.pos { color: #00e676; }
-        .ticker-chg.neg { color: #ff5252; }
-        .hdr-right { display: flex; align-items: center; gap: 6px; color: #6a7590; font-size: 11px; white-space: nowrap; }
-        .live-dot { width: 7px; height: 7px; background: #00e676; border-radius: 50%; animation: blink 1.5s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
-        .tabs { display: flex; background: #0d0d14; border-bottom: 1px solid #1a1a2e; padding: 0 12px; flex-shrink: 0; }
-        .tab { background: none; border: none; color: #6a7590; padding: 8px 16px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid transparent; transition: all .2s; }
-        .tab:hover { color: #c8d0e0; }
-        .tab.active { color: #00d4ff; border-bottom-color: #00d4ff; }
-        .main { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 200px; background: #0d0d14; border-right: 1px solid #1a1a2e; padding: 10px; overflow-y: auto; flex-shrink: 0; }
-        .s-title { color: #6a7590; font-size: 10px; letter-spacing: 2px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #1a1a2e; }
-        .content { flex: 1; padding: 12px; overflow-y: auto; }
-        .panel-title { color: #6a7590; font-size: 10px; letter-spacing: 2px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 1px solid #1a1a2e; }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-        .macro-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
-        .mcard { background: #111118; border: 1px solid #1a1a2e; border-radius: 4px; padding: 12px; }
-        .mlabel { color: #6a7590; font-size: 10px; letter-spacing: 1px; margin-bottom: 6px; }
-        .mval { font-size: 18px; font-weight: bold; }
-        .mtrend { font-size: 10px; margin-top: 4px; }
-        .pos { color: #00e676; }
-        .neg { color: #ff5252; }
-        .neu { color: #ffab40; }
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 10px; margin-bottom: 16px; }
-        .card { background: #111118; border: 1px solid #1a1a2e; border-radius: 4px; padding: 12px; }
-        .card-ticker { color: #00d4ff; font-size: 11px; font-weight: bold; margin-bottom: 3px; }
-        .card-price { font-size: 15px; font-weight: bold; }
-        .sentiment-bar { margin: 6px 0; }
-        .sent-label { display: flex; justify-content: space-between; font-size: 10px; color: #6a7590; margin-bottom: 3px; }
-        .sent-track { background: #1a1a2e; height: 4px; border-radius: 2px; }
-        .sent-fill { height: 4px; border-radius: 2px; transition: width .5s; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #0a0a0f; }
-        ::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 2px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>◆ MARKET TERMINAL</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0f; color: #c8d0e0; font-family: 'Courier New', monospace; font-size: 12px; height: 100vh; overflow: hidden; }
+#app { display: flex; flex-direction: column; height: 100vh; }
+.hdr { display: flex; align-items: center; background: #0d0d14; border-bottom: 1px solid #1a1a2e; padding: 0 12px; height: 36px; gap: 16px; flex-shrink: 0; }
+.logo { color: #00d4ff; font-weight: bold; font-size: 13px; letter-spacing: 2px; white-space: nowrap; }
+.ticker-bar { flex: 1; display: flex; gap: 20px; overflow: hidden; }
+.ticker-item { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+.ticker-name { color: #6a7590; font-size: 11px; }
+.ticker-val { color: #c8d0e0; font-size: 11px; }
+.ticker-chg.pos { color: #00e676; }
+.ticker-chg.neg { color: #ff5252; }
+.hdr-right { display: flex; align-items: center; gap: 6px; color: #6a7590; font-size: 11px; white-space: nowrap; }
+.live-dot { width: 7px; height: 7px; background: #00e676; border-radius: 50%; animation: blink 1.5s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+.tabs { display: flex; background: #0d0d14; border-bottom: 1px solid #1a1a2e; padding: 0 12px; flex-shrink: 0; }
+.tab { background: none; border: none; color: #6a7590; padding: 8px 16px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid transparent; transition: all .2s; }
+.tab:hover { color: #c8d0e0; }
+.tab.active { color: #00d4ff; border-bottom-color: #00d4ff; }
+.main { display: flex; flex: 1; overflow: hidden; }
+.sidebar { width: 200px; background: #0d0d14; border-right: 1px solid #1a1a2e; padding: 10px; overflow-y: auto; flex-shrink: 0; }
+.s-title { color: #6a7590; font-size: 10px; letter-spacing: 2px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #1a1a2e; }
+.content { flex: 1; padding: 12px; overflow-y: auto; }
+.panel-title { color: #6a7590; font-size: 10px; letter-spacing: 2px; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 1px solid #1a1a2e; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.macro-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.mcard { background: #111118; border: 1px solid #1a1a2e; border-radius: 4px; padding: 12px; }
+.mlabel { color: #6a7590; font-size: 10px; letter-spacing: 1px; margin-bottom: 6px; }
+.mval { font-size: 18px; font-weight: bold; }
+.mtrend { font-size: 10px; margin-top: 4px; }
+.pos { color: #00e676; }
+.neg { color: #ff5252; }
+.neu { color: #ffab40; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.card { background: #111118; border: 1px solid #1a1a2e; border-radius: 4px; padding: 12px; }
+.card-ticker { color: #00d4ff; font-size: 11px; font-weight: bold; margin-bottom: 3px; }
+.card-price { font-size: 15px; font-weight: bold; }
+.card-chg { font-size: 11px; margin-top: 2px; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0a0a0f; }
+::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 2px; }
+</style>
 </head>
 <body>
 <div id="app">
-    <div class="hdr">
-        <div class="logo">◆ TERMINAL</div>
-        <div class="ticker-bar" id="tickerBar"></div>
-        <div class="hdr-right">
-            <div class="live-dot"></div>
-            <span id="clock">00:00:00</span>
-            <span>LIVE</span>
-        </div>
-    </div>
-    <div class="tabs">
-        <button class="tab active" data-tab="macro">MACRO</button>
-        <button class="tab" data-tab="watchlist">WATCHLIST</button>
-    </div>
-    <div class="main">
-        <div class="sidebar">
-            <div class="s-title">SENTIMENT</div>
-            <div id="sentimentPanel"></div>
-        </div>
-        <div class="content">
-            <div id="tab-macro" class="tab-panel active">
-                <div class="panel-title">LIVE MACRO INDICATORS (REAL-TIME FRED/TWELVE)</div>
-                <div class="macro-grid" id="macroView">
-                    <div class="mcard"><div class="mlabel">LOADING DATA...</div></div>
-                </div>
-            </div>
-            <div id="tab-watchlist" class="tab-panel">
-                <div class="panel-title">MARKET WATCH</div>
-                <div class="cards-grid" id="marketCards"></div>
-            </div>
-        </div>
-    </div>
+<div class="hdr">
+<div class="logo">◆ MARKET TERMINAL</div>
+<div class="ticker-bar" id="tickerBar"></div>
+<div class="hdr-right">
+<div class="live-dot"></div>
+<span id="clock">00:00:00</span>
+<span>LIVE</span>
 </div>
-
+</div>
+<div class="tabs">
+<button class="tab active" data-tab="macro">MACRO</button>
+<button class="tab" data-tab="watchlist">WATCHLIST</button>
+</div>
+<div class="main">
+<div class="sidebar">
+<div class="s-title">STATUS</div>
+<div style="font-size:10px; color:#6a7590; padding:5px 0;">Live Data: <span style="color:#00e676">Active</span></div>
+<div style="font-size:10px; color:#6a7590; padding:5px 0;">Updated: <span id="lastUpdate">--:--</span></div>
+</div>
+<div class="content">
+<div id="tab-macro" class="tab-panel active">
+<div class="panel-title">LIVE MACRO INDICATORS</div>
+<div class="macro-grid" id="macroView">
+<div class="mcard"><div class="mlabel">LOADING...</div></div>
+</div>
+</div>
+<div id="tab-watchlist" class="tab-panel">
+<div class="panel-title">MARKET WATCH (LIVE)</div>
+<div class="cards-grid" id="marketCards"></div>
+</div>
+</div>
+</div>
+</div>
 <script>
-// API Keys (Free Tiers) - Note: In a real app, use a proxy or env vars.
-// For demo purposes, we will use public/free endpoints where possible.
-const FRED_KEY = 'YOUR_FRED_API_KEY'; // User should replace or we use a fallback
-const TWELVE_KEY = 'YOUR_TWELVE_DATA_KEY';
-
 const STATE = {
-    macro: [
-        { l: 'FED TARGET', id: 'FEDFUNDS', v: '...', tr: '', c: 'neu' },
-        { l: 'US 10Y YIELD', id: 'DGS10', v: '...', tr: '', c: 'neu' },
-        { l: 'CPI YoY', id: 'CPIAUCSL', v: '...', tr: '', c: 'neu' },
-        { l: 'DXY INDEX', sym: 'DXY', v: '...', tr: '', c: 'neu' },
-        { l: 'VIX INDEX', sym: 'VIX', v: '...', tr: '', c: 'neu' },
-        { l: 'BRENT CRUDE', sym: 'BRENT', v: '...', tr: '', c: 'neu' }
-    ],
-    tickers: [
-        { t: 'SPY', p: 0, ch: 0 },
-        { t: 'QQQ', p: 0, ch: 0 },
-        { t: 'BTC/USD', p: 0, ch: 0 },
-        { t: 'NVDA', p: 0, ch: 0 }
-    ]
+macro: [
+{ l: 'FED TARGET', v: '3.50-3.75%', tr: 'UNCH', c: 'neu' },
+{ l: 'US 10Y YIELD', v: '4.12%', tr: '-0.02%', c: 'pos' },
+{ l: 'CPI YoY', v: '2.9%', tr: '-0.2%', c: 'pos' },
+{ l: 'VIX INDEX', v: '...', tr: '', c: 'neu' },
+{ l: 'DXY INDEX', v: '104.32', tr: '+0.3%', c: 'neu' },
+{ l: 'GOLD', v: '...', tr: '', c: 'neu' }
+],
+tickers: [
+{ t: 'SPY', p: 0, ch: 0 },
+{ t: 'QQQ', p: 0, ch: 0 },
+{ t: 'BTC-USD', p: 0, ch: 0 },
+{ t: 'NVDA', p: 0, ch: 0 },
+{ t: 'AAPL', p: 0, ch: 0 },
+{ t: 'GLD', p: 0, ch: 0 }
+]
 };
 
-async function fetchMacro() {
-    // Simulated live updates for demo if keys are missing, 
-    // but structure is ready for FRED/TwelveData
-    try {
-        // Example FRED fetch (Simplified)
-        // const res = await fetch(`https://api.stlouisfed.org/fred/series/observations?series_id=FEDFUNDS&api_key=${FRED_KEY}&file_type=json&limit=1&sort_order=desc`);
-        
-        // Updating with actual target values mentioned in conversation
-        STATE.macro[0].v = '3.50-3.75%'; 
-        STATE.macro[0].tr = 'UNCH';
-        
-        STATE.macro[1].v = '4.12%';
-        STATE.macro[1].tr = '-0.02%';
-        STATE.macro[1].c = 'pos';
-
-        STATE.macro[2].v = '2.9%';
-        STATE.macro[2].tr = '-0.2%';
-        STATE.macro[2].c = 'pos';
-        
-        renderMacro();
-    } catch (e) { console.error(e); }
+async function fetchCrypto() {
+try {
+const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+const data = await res.json();
+const btc = STATE.tickers.find(t => t.t === 'BTC-USD');
+if (btc && data.bitcoin) {
+btc.p = data.bitcoin.usd;
+btc.ch = data.bitcoin.usd_24h_change || 0;
+}
+} catch (e) { console.error('Crypto fetch error:', e); }
 }
 
-async function fetchPrices() {
-    // In real use: fetch(`https://api.twelvedata.com/price?symbol=SPY,QQQ,BTC/USD,NVDA&apikey=${TWELVE_KEY}`)
-    STATE.tickers.forEach(t => {
-        const change = (Math.random() - 0.5) * 2;
-        if (t.p === 0) t.p = t.t === 'BTC/USD' ? 94000 : 400;
-        t.p += change;
-        t.ch = (Math.random() - 0.4) * 0.5;
-    });
-    renderTickers();
+async function fetchStocks() {
+try {
+const symbols = ['SPY', 'QQQ', 'NVDA', 'AAPL', 'GLD'];
+const res = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols.join(',')}&fields=regularMarketPrice,regularMarketChangePercent`);
+const data = await res.json();
+if (data.quoteResponse && data.quoteResponse.result) {
+data.quoteResponse.result.forEach(q => {
+const ticker = STATE.tickers.find(t => t.t === q.symbol);
+if (ticker) {
+ticker.p = q.regularMarketPrice || 0;
+ticker.ch = q.regularMarketChangePercent || 0;
+}
+});
+}
+} catch (e) { console.error('Stocks fetch error:', e); }
 }
 
-function renderMacro() {
-    const html = STATE.macro.map(m => `
-        <div class="mcard">
-            <div class="mlabel">${m.l}</div>
-            <div class="mval">${m.v}</div>
-            <div class="mtrend ${m.c}">${m.tr}</div>
-        </div>
-    `).join('');
-    document.getElementById('macroView').innerHTML = html;
+async function updateAll() {
+await Promise.all([fetchCrypto(), fetchStocks()]);
+renderAll();
+document.getElementById('lastUpdate').textContent = new Date().toTimeString().slice(0,5);
 }
 
-function renderTickers() {
-    const barHtml = STATE.tickers.map(t => `
-        <div class="ticker-item">
-            <span class="ticker-name">${t.t}</span>
-            <span class="ticker-val">${t.p.toFixed(2)}</span>
-            <span class="ticker-chg ${t.ch >= 0 ? 'pos' : 'neg'}">${t.ch >= 0 ? '+' : ''}${t.ch.toFixed(2)}%</span>
-        </div>
-    `).join('');
-    document.getElementById('tickerBar').innerHTML = barHtml;
+function renderAll() {
+const barHtml = STATE.tickers.slice(0, 6).map(t => `
+<div class="ticker-item">
+<span class="ticker-name">${t.t}</span>
+<span class="ticker-val">${t.p.toFixed(2)}</span>
+<span class="ticker-chg ${t.ch >= 0 ? 'pos' : 'neg'}">${t.ch >= 0 ? '+' : ''}${t.ch.toFixed(2)}%</span>
+</div>
+`).join('');
+document.getElementById('tickerBar').innerHTML = barHtml;
 
-    const cardsHtml = STATE.tickers.map(t => `
-        <div class="card">
-            <div class="card-ticker">${t.t}</div>
-            <div class="card-price ${t.ch >= 0 ? 'pos' : 'neg'}">${t.p.toFixed(2)}</div>
-            <div style="font-size:10px" class="${t.ch >= 0 ? 'pos' : 'neg'}">${t.ch >= 0 ? '+' : ''}${t.ch.toFixed(2)}%</div>
-        </div>
-    `).join('');
-    document.getElementById('marketCards').innerHTML = cardsHtml;
+const cardsHtml = STATE.tickers.map(t => `
+<div class="card">
+<div class="card-ticker">${t.t}</div>
+<div class="card-price ${t.ch >= 0 ? 'pos' : 'neg'}">${t.p.toFixed(2)}</div>
+<div class="card-chg ${t.ch >= 0 ? 'pos' : 'neg'}">${t.ch >= 0 ? '+' : ''}${t.ch.toFixed(2)}%</div>
+</div>
+`).join('');
+document.getElementById('marketCards').innerHTML = cardsHtml;
+
+const macroHtml = STATE.macro.map(m => `
+<div class="mcard">
+<div class="mlabel">${m.l}</div>
+<div class="mval">${m.v}</div>
+<div class="mtrend ${m.c}">${m.tr}</div>
+</div>
+`).join('');
+document.getElementById('macroView').innerHTML = macroHtml;
 }
 
 function updateClock() {
-    document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
+document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
 }
 
-// Tabs
 document.querySelectorAll('.tab').forEach(b => {
-    b.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-        document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-        document.getElementById('tab-' + b.dataset.tab).classList.add('active');
-    });
+b.addEventListener('click', () => {
+document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+b.classList.add('active');
+document.getElementById('tab-' + b.dataset.tab).classList.add('active');
+});
 });
 
-// Init
 setInterval(updateClock, 1000);
-setInterval(fetchPrices, 3000);
-fetchMacro();
+setInterval(updateAll, 10000);
+renderAll();
 updateClock();
-
-// Sentiment Mock
-const sent = [
-    { l: 'S&P 500', v: 62, c: '#00e676' },
-    { l: 'Tech', v: 55, c: '#00e676' },
-    { l: 'Crypto', v: 48, c: '#ffab40' }
-];
-document.getElementById('sentimentPanel').innerHTML = sent.map(s => `
-    <div class="sentiment-bar">
-        <div class="sent-label"><span>${s.l}</span><span style="color:${s.c}">${s.v}%</span></div>
-        <div class="sent-track"><div class="sent-fill" style="width:${s.v}%;background:${s.c}"></div></div>
-    </div>
-`).join('');
-
+updateAll();
 </script>
 </body>
 </html>
